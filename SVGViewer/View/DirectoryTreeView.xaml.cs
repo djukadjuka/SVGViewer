@@ -24,5 +24,6 @@ namespace SVGViewer.View
         {
             InitializeComponent();
         }
+
     }
 }

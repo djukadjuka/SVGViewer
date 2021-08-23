@@ -57,6 +57,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\CommandBase.cs" />
+    <Compile Include="Model\UserDirectory.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\DirectoryTreeView.xaml.cs">
@@ -112,8 +113,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Model\" />
+    <Resource Include="Images\folder32.png" />
+    <Content Include="Images\folder32.svg" />
+    <Resource Include="Images\folder-open32.png" />
+    <Content Include="Images\folder-open32.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
