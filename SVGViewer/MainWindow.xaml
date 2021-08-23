@@ -4,9 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SVGViewer"
+        xmlns:controls="clr-namespace:SVGViewer.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="SVG Viewer" Height="600" Width="1000">
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Main">
+                <MenuItem Header="_Select Main Directory ..." Command="{Binding SelectMainDirectoryCommand}"/>
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Bottom">
+            <!-- GRID CONFIG -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <controls:DirectoryTreeView Grid.Column="0"/>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+            <controls:SVGDisplay Grid.Column="2"/>
+        </Grid>
+    </DockPanel>
 </Window>
