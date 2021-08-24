@@ -4,6 +4,30 @@
              xmlns:local="clr-namespace:SVGViewer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!--BUTTON WITH IMAGE AND NO TEXT-->
+        <Style TargetType="Button" x:Key="ButtonImage">
+            <Setter Property="BorderThickness" Value="0.5"></Setter>
+            <Setter Property="Background" Value="Transparent"></Setter>
+            <Setter Property="Margin" Value="2"></Setter>
+            <Setter Property="Padding" Value="0"></Setter>
+        </Style>
+        <!--LEFT JUSTIFIED CENTRAL LABEL-->
+        <Style TargetType="TextBlock" x:Key="LeftJustifiedCentralLabel">
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="FontFamily" Value="Consolas"></Setter>
+        </Style>
+        <!--#region TREE NODE ITEMS -->
+        <!--TREE NODE IMAGE STYLE-->
+        <Style TargetType="Image" x:Key="TreeNodeImageStyle">
+            <Setter Property="MaxWidth" Value="20"></Setter>
+            <Setter Property="MaxHeight" Value="20"></Setter>
+        </Style>
+        <!--TREE NODE TEXT STYLE-->
+        <Style TargetType="TextBlock" x:Key="TreeNodeTextStyle" BasedOn="{StaticResource LeftJustifiedCentralLabel}">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Margin" Value="5, 0, 5, 0"/>
+        </Style>
+        <!--#endregion-->
     </Application.Resources>
 </Application>

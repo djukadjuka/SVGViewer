@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using SVGViewer.Command;
 using SVGViewer.Model;
+using SVGViewer.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -17,7 +19,7 @@ namespace SVGViewer.ViewModel
     {
         public MainWindowVM()
         {
-
+            this.MainDirectory = AppConfigStuff.GetInstance()[AppConfigStuff.KEY_MAIN_DIRECTORY];
         }
 
         #region PROPERTIES
@@ -39,12 +41,9 @@ namespace SVGViewer.ViewModel
                 OnPropertyChanged(nameof(MainDirectory));
 
                 ObservableCollection<UserDirectory> directoryStructure = new ObservableCollection<UserDirectory>();
-                string [] dirs = Directory.GetDirectories(MainDirectory);
-                Console.WriteLine(MainDirectory);
-                foreach(string subdir in dirs)
-                {
-                    Console.WriteLine(subdir);
-                }
+
+                this.DirectoryStructure.Clear();
+                this.DirectoryStructure.Add(new UserDirectory(MainDirectory));
             }
         }
 
@@ -60,13 +59,25 @@ namespace SVGViewer.ViewModel
                     root_dir.DirectoryPath = MainDirectory;
                     _directoryStructure.Add(root_dir);
                 }
-                Console.WriteLine(_directoryStructure);
                 return _directoryStructure;
             }
             set
             {
                 _directoryStructure = value;
                 OnPropertyChanged(nameof(DirectoryStructure));
+            }
+        }
+
+        private object _selectedTreeViewNode;
+
+        public object SelectedTreeViewNode
+        {
+            get { return _selectedTreeViewNode; }
+            set 
+            { 
+                _selectedTreeViewNode = value;
+                Console.WriteLine(_selectedTreeViewNode);
+                OnPropertyChanged();
             }
         }
 
@@ -88,24 +99,71 @@ namespace SVGViewer.ViewModel
             }
         }
 
-        private void SelectMainDirectory()
+        private ICommand _copyMainDirectoryPathCommand;
+
+        public ICommand CopyMainDirectoryPathCommand
         {
-            using(FolderBrowserDialog dialog = new FolderBrowserDialog())
+            get
             {
-                dialog.ShowNewFolderButton = false;
-                dialog.SelectedPath = MainDirectory;
-
-                DialogResult result = dialog.ShowDialog();
-
-                if (!result.Equals(DialogResult.OK))
+                if(_copyMainDirectoryPathCommand == null)
                 {
-                    return;
+                    _copyMainDirectoryPathCommand = new CommandBase((x) => CopyMainDirectoryPath(), (x) => true);
                 }
-
-                MainDirectory = dialog.SelectedPath;
+                return _copyMainDirectoryPathCommand;
             }
         }
 
+        private ICommand _exitApplicationCommand;
+
+        public ICommand ExitApplicationCommand
+        {
+            get {
+                if(_exitApplicationCommand == null)
+                {
+                    _exitApplicationCommand = new CommandBase((x) => System.Windows.Application.Current.Shutdown(), (x) => true);
+                }
+                return _exitApplicationCommand; 
+            }
+        }
+
+        private void SelectMainDirectory()
+        {
+            try
+            {
+                using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+                {
+                    dialog.ShowNewFolderButton = false;
+                    dialog.SelectedPath = MainDirectory;
+
+                    DialogResult result = dialog.ShowDialog();
+
+                    if (!result.Equals(DialogResult.OK))
+                    {
+                        return;
+                    }
+
+                    MainDirectory = dialog.SelectedPath;
+                    AppConfigStuff.GetInstance().AddAndSaveAttribute(AppConfigStuff.KEY_MAIN_DIRECTORY, MainDirectory);
+                }
+            }
+            catch(Exception ex)
+            {
+                InfoLogger.ShowInformationText("Error Opening File", ex.Message);
+                MainDirectory = AppConfigStuff.GetInstance()[AppConfigStuff.KEY_MAIN_DIRECTORY];
+            }
+        }
+        private void CopyMainDirectoryPath()
+        {
+            System.Windows.Forms.Clipboard.SetText(MainDirectory);
+        }
+
+        public void SelectedTreeItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            dynamic x = sender;
+            UserDirectory selectedDir = x.SelectedItem;
+            string directoryPath = selectedDir.DirectoryPath;
+            
+        }
         #endregion
     }
 }

@@ -1,5 +1,4 @@
-﻿using SVGViewer.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,24 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SVGViewer
+namespace SVGViewer.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainDirectoryControls.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainDirectoryControls : UserControl
     {
-        public MainWindow()
+        public MainDirectoryControls()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowVM();
-        }
-
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            Console.WriteLine(sender);
-            // sender.DataContext.SelectedTreeItemChanged(sender, e);
         }
     }
 }

@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="SVGViewer.View.MainDirectoryControls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SVGViewer.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="32" d:DesignWidth="500">
+    <Grid Margin="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--Button to copy the directory to clipboard-->
+        <Button Grid.Column="0" Style="{StaticResource ButtonImage}" Command="{Binding CopyMainDirectoryPathCommand}">
+            <Image Source="/Images/copy-32.png"></Image>
+        </Button>
+        <!--Button to change the directory-->
+        <Button Grid.Column="1" Style="{StaticResource ButtonImage}" Command="{Binding SelectMainDirectoryCommand}">
+            <Image Source="/Images/opened-folder-32.png"></Image>
+        </Button>
+        <!--Label where the directory is located-->
+        <Grid Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Style="{StaticResource LeftJustifiedCentralLabel}" Margin="20, 0, 20, 0" FontWeight="Bold">
+            Main directory location:
+            </TextBlock>
+            <TextBlock Grid.Column="1" Style="{StaticResource LeftJustifiedCentralLabel}" Text="{Binding Path=MainDirectory}"></TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>

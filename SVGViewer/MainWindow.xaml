@@ -12,21 +12,35 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Main">
                 <MenuItem Header="_Select Main Directory ..." Command="{Binding SelectMainDirectoryCommand}"/>
+                <Separator/>
+                <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Bottom">
             <!-- GRID CONFIG -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <controls:DirectoryTreeView Grid.Column="0"/>
-            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
-            <controls:SVGDisplay Grid.Column="2"/>
+            
+            <!--Main directory controls-->
+            <controls:MainDirectoryControls Grid.Row="0"/>
+            
+            <!--Inner grid with main controls-->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <controls:DirectoryTreeView Grid.Column="0"/>
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+                <controls:SVGDisplay Grid.Column="2"/>
+            </Grid>
+            
+            <!--Status bar-->
+            <controls:StatusBar Grid.Row="3"/>
         </Grid>
     </DockPanel>
 </Window>

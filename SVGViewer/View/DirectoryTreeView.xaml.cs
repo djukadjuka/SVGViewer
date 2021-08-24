@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SVGViewer.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,5 +26,9 @@ namespace SVGViewer.View
             InitializeComponent();
         }
 
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            ((MainWindowVM)((Grid)Parent).DataContext).SelectedTreeItemChanged(sender, e);
+        }
     }
 }
