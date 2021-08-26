@@ -70,6 +70,18 @@ namespace SVGViewer.ViewModel
 
         private object _selectedTreeViewNode;
 
+        private ObservableCollection<SVGImageCell> _svgImages;
+
+        public ObservableCollection<SVGImageCell> SVGImages
+        {
+            get { return _svgImages; }
+            set { 
+                _svgImages = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public object SelectedTreeViewNode
         {
             get { return _selectedTreeViewNode; }
@@ -162,7 +174,17 @@ namespace SVGViewer.ViewModel
             dynamic x = sender;
             UserDirectory selectedDir = x.SelectedItem;
             string directoryPath = selectedDir.DirectoryPath;
+
+            string[] svgImageFilePaths = Directory.GetFiles(directoryPath, "*.svg");
             
+            ObservableCollection<SVGImageCell> collection = new ObservableCollection<SVGImageCell>();
+            
+            foreach(string svgImageFilePath in svgImageFilePaths)
+            {
+                collection.Add(new SVGImageCell(svgImageFilePath));
+            }
+
+            SVGImages = collection;
         }
         #endregion
     }
