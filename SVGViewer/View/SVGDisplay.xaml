@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <DataGrid ItemsSource="{Binding SVGImages}" ColumnWidth="*" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding SVGImages}" ColumnWidth="*" AutoGenerateColumns="False" SelectionMode="Single" SelectedItem="{Binding SelectedSvgRow}">
             <DataGrid.Columns>
 
                 <DataGridTemplateColumn Header="Image" Width="auto">
@@ -23,7 +23,7 @@
                 <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button>
+                            <Button Command="{Binding SvgImagePathCopyAction}">
                                 <Image Source="/Images/copy-32.png"></Image>
                             </Button>
                         </DataTemplate>

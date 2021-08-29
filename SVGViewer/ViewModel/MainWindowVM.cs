@@ -5,6 +5,7 @@ using SVGViewer.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,6 +48,8 @@ namespace SVGViewer.ViewModel
             }
         }
 
+
+
         public ObservableCollection<UserDirectory> _directoryStructure;
         public ObservableCollection<UserDirectory> DirectoryStructure
         {
@@ -68,10 +71,9 @@ namespace SVGViewer.ViewModel
             }
         }
 
-        private object _selectedTreeViewNode;
+
 
         private ObservableCollection<SVGImageCell> _svgImages;
-
         public ObservableCollection<SVGImageCell> SVGImages
         {
             get { return _svgImages; }
@@ -82,13 +84,26 @@ namespace SVGViewer.ViewModel
         }
 
 
-        public object SelectedTreeViewNode
+
+        private SVGImageCell _selectedSvgRow;
+        public SVGImageCell SelectedSvgRow
         {
-            get { return _selectedTreeViewNode; }
+            get { return _selectedSvgRow; }
             set 
             { 
-                _selectedTreeViewNode = value;
-                Console.WriteLine(_selectedTreeViewNode);
+                _selectedSvgRow = value; 
+            }
+        }
+
+
+
+        private string _statusBarText = " ";
+        public string StatusBarText
+        {
+            get { return _statusBarText; }
+            set 
+            { 
+                _statusBarText = value;
                 OnPropertyChanged();
             }
         }
@@ -111,8 +126,9 @@ namespace SVGViewer.ViewModel
             }
         }
 
-        private ICommand _copyMainDirectoryPathCommand;
 
+
+        private ICommand _copyMainDirectoryPathCommand;
         public ICommand CopyMainDirectoryPathCommand
         {
             get
@@ -125,8 +141,9 @@ namespace SVGViewer.ViewModel
             }
         }
 
-        private ICommand _exitApplicationCommand;
 
+
+        private ICommand _exitApplicationCommand;
         public ICommand ExitApplicationCommand
         {
             get {
@@ -137,6 +154,24 @@ namespace SVGViewer.ViewModel
                 return _exitApplicationCommand; 
             }
         }
+
+
+
+        private ICommand _svgImagePathCopyAction;
+        public ICommand SvgImagePathCopyAction
+        {
+            get 
+            {
+                if(_svgImagePathCopyAction == null)
+                {
+                    _svgImagePathCopyAction = new CommandBase((x) => SvgImagePathCopyActionFunction(), (x) => true);
+                }
+                return _svgImagePathCopyAction; 
+            }
+            set { _svgImagePathCopyAction = value; }
+        }
+
+
 
         private void SelectMainDirectory()
         {
@@ -167,6 +202,11 @@ namespace SVGViewer.ViewModel
         private void CopyMainDirectoryPath()
         {
             System.Windows.Forms.Clipboard.SetText(MainDirectory);
+            this.StatusBarText = FormatStatusBarText($"Directory {MainDirectory} copied to clipboard.");
+        }
+        private void SvgImagePathCopyActionFunction()
+        {
+            this.StatusBarText = FormatStatusBarText($"Directory {SelectedSvgRow.ImagePath} copied to clipboard.");
         }
 
         public void SelectedTreeItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -181,10 +221,15 @@ namespace SVGViewer.ViewModel
             
             foreach(string svgImageFilePath in svgImageFilePaths)
             {
-                collection.Add(new SVGImageCell(svgImageFilePath));
+                collection.Add(new SVGImageCell(svgImageFilePath, (y) => SvgImagePathCopyActionFunction() ));
             }
 
             SVGImages = collection;
+        }
+
+        public string FormatStatusBarText(string text)
+        {
+            return $">> {text}";
         }
         #endregion
     }
