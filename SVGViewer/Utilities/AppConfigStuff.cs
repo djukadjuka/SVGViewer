@@ -28,6 +28,7 @@ namespace SVGViewer.Utilities
         public void ReloadConfigurationFile()
         {
             string filePath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, VALUE_CONFIGURATION_FILE_NAME);
+
             if (!File.Exists(filePath))
             {
                 ResetConfigurationFile();   
@@ -40,6 +41,7 @@ namespace SVGViewer.Utilities
         public void ResetConfigurationFile()
         {
             string filePath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, VALUE_CONFIGURATION_FILE_NAME);
+            AppConfigParameters = new Dictionary<string, string>();
             AppConfigParameters[KEY_MAIN_DIRECTORY] = System.AppDomain.CurrentDomain.BaseDirectory;
             AppConfigParameters[KEY_CONFIGURATION_FILE_NAME] = VALUE_CONFIGURATION_FILE_NAME;
             AppConfigParameters[KEY_FALLBACK_DIRECTORY] = VALUE_FALLBACK_DIRECTORY;
@@ -57,8 +59,23 @@ namespace SVGViewer.Utilities
 
         public string this[string index]
         {
-            get { return this.AppConfigParameters[index]; }
-            set { this.AppConfigParameters[index] = value; }
+            get { 
+                if(this.AppConfigParameters == null)
+                {
+                    this.ResetConfigurationFile();
+                    this.ReloadConfigurationFile();
+                }
+                return this.AppConfigParameters[index]; 
+            }
+            set
+            {
+                if (this.AppConfigParameters == null)
+                {
+                    this.ResetConfigurationFile();
+                    this.ReloadConfigurationFile();
+                }
+                this.AppConfigParameters[index] = value; 
+            }
         }
 
         #region SINGLETON
